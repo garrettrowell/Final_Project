@@ -7,7 +7,21 @@ import java.io.InputStreamReader;
 
 public class conwayGOL {
 
-	public Integer rows,cloumns;
+	static conwayGOL cgol = new conwayGOL();
+	public Integer rows,cloumns,currentGen,maxGen;
+	
+	public Integer getCurrentGen() {
+		return currentGen;
+	}
+	public void setCurrentGen(Integer currentGen) {
+		this.currentGen = currentGen;
+	}
+	public Integer getMaxGen() {
+		return maxGen;
+	}
+	public void setMaxGen(Integer maxGen) {
+		this.maxGen = maxGen;
+	}
 	public Integer getRows() {
 		return rows;
 	}
@@ -22,11 +36,11 @@ public class conwayGOL {
 	}
 		
 	public static void main(String[] args) {
-		Integer gen=null;
+		//Integer gen=null;
 		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("How many generations would you like to run?");
 		try {
-			gen=Integer.parseInt(buffer.readLine());
+			cgol.setMaxGen(Integer.parseInt(buffer.readLine()));
 		} 
 		catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -42,12 +56,12 @@ public class conwayGOL {
 				ex.printStackTrace();
 			}
 		}
-		System.out.println(gen);
+		System.out.println(cgol.getMaxGen());
 		firstGen();		
 	}
 	
 	public static void firstGen(){
-		conwayGOL cgol = new conwayGOL();
+		
 		BufferedReader br = null;
 		String[] in = null;
 		int ints=0,lines=0;
@@ -65,11 +79,11 @@ public class conwayGOL {
 						if(in[i].matches("\\d"))
 						{
 							if(ints==0){
-								cgol.setRows(Integer.parseInt(in[i]));
+								cgol.setCloumns(Integer.parseInt(in[i]));
 								ints++;
 							}
 							if(ints==1){
-								cgol.setCloumns(Integer.parseInt(in[i]));
+								cgol.setRows(Integer.parseInt(in[i]));
 							}
 						}
 					}
@@ -81,7 +95,7 @@ public class conwayGOL {
 				if(lines>=1){
 					for (int i=0;i<in.length;i++){
 						if (!in[i].equals("")){
-							first[i-1][lines-1]=in[i];
+							first[lines-1][i-1]=in[i];
 						}
 					}	
 				}
@@ -96,11 +110,13 @@ public class conwayGOL {
 				ex.printStackTrace();
 			}
 		}
-		
 		//outputs first generation
-		for(int i=0;i<=cgol.getRows()-1;i++){
-			for(int j=0;j<=cgol.getCloumns()-1;j++){
-				System.out.println(i+" "+j+" "+first[i][j]);
+		for(int i=0;i<=(cgol.getRows()-1);i++){
+			for(int j=0;j<=(cgol.getCloumns()-1);j++){
+				System.out.print(first[i][j]);
+				if (j==cgol.getCloumns()-1){
+					System.out.print("\n");
+				}
 			}
 		}
 	}
