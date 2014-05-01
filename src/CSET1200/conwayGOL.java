@@ -9,6 +9,7 @@ public class conwayGOL {
 
 	static conwayGOL cgol = new conwayGOL();
 	public Integer rows,cloumns,currentGen,maxGen;
+	public String[][] current=null,next=null;
 	
 	public Integer getCurrentGen() {
 		return currentGen;
@@ -36,7 +37,6 @@ public class conwayGOL {
 	}
 		
 	public static void main(String[] args) {
-		//Integer gen=null;
 		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("How many generations would you like to run?");
 		try {
@@ -56,8 +56,8 @@ public class conwayGOL {
 				ex.printStackTrace();
 			}
 		}
-		System.out.println(cgol.getMaxGen());
-		firstGen();		
+		firstGen();	
+		next();
 	}
 	
 	public static void firstGen(){
@@ -65,12 +65,11 @@ public class conwayGOL {
 		BufferedReader br = null;
 		String[] in = null;
 		int ints=0,lines=0;
-		String [][] first = null;
+		cgol.setCurrentGen(0);
 		
- 
 		try {
 			String CurrentLine; 
-			br = new BufferedReader(new FileReader("/home/garrett/workspace_CSET1200/Final_Project/src/CSET1200/conway.text"));
+			br = new BufferedReader(new FileReader("/home/garrett/workspace_CSET1200/Final_Project/src/CSET1200/test2.txt"));
 			while ((CurrentLine = br.readLine()) != null) {
 				in=CurrentLine.split("");
 
@@ -90,12 +89,12 @@ public class conwayGOL {
 				}
 				
 				if (lines==1){
-					first = new String[cgol.getRows()][cgol.getCloumns()];
+					cgol.current = new String[cgol.getRows()][cgol.getCloumns()];
 				}
 				if(lines>=1){
 					for (int i=0;i<in.length;i++){
 						if (!in[i].equals("")){
-							first[lines-1][i-1]=in[i];
+								cgol.current[lines-1][i-1]=in[i];							
 						}
 					}	
 				}
@@ -111,13 +110,69 @@ public class conwayGOL {
 			}
 		}
 		//outputs first generation
+		System.out.println("Generation: "+cgol.getCurrentGen());
 		for(int i=0;i<=(cgol.getRows()-1);i++){
 			for(int j=0;j<=(cgol.getCloumns()-1);j++){
-				System.out.print(first[i][j]);
+				System.out.print(cgol.current[i][j]);
 				if (j==cgol.getCloumns()-1){
 					System.out.print("\n");
 				}
 			}
 		}
+		cgol.setCurrentGen(cgol.getCurrentGen()+1);
 	}
+
+	public static void next (){
+		for(cgol.getCurrentGen();cgol.getCurrentGen()<=cgol.getMaxGen();cgol.setCurrentGen(cgol.getCurrentGen()+1)){
+			
+		
+		String[][] tempCells = new String [cgol.getRows()][cgol.getCloumns()]; 
+		for( int i=0; i<cgol.getRows(); i++ ) {
+			for( int j=0; j<cgol.getCloumns(); j++ ) {
+				tempCells[i][j] = cgol.current[i][j];
+				}
+			} 
+		
+		for (int row = 0; row < cgol.getRows() ; row++){
+			for (int col = 0 ; col < cgol.getCloumns() ; col++) {
+				int n = neighbours(row,col);
+				if (n > 3  ||  n < 2)
+					tempCells[row][col]=(" ");
+				else if (n == 3)
+					tempCells[row][col]=("*");
+				else
+					tempCells[row][col]=(cgol.current[row][col]);
+				}
+		}
+		System.out.println("Generation: "+cgol.getCurrentGen());
+		for(int i=0;i<=(cgol.getRows()-1);i++){
+			for(int j=0;j<=(cgol.getCloumns()-1);j++){
+				System.out.print(tempCells[i][j]);
+				cgol.current[i][j]=tempCells[i][j];
+				if (j==cgol.getCloumns()-1){
+					System.out.print("\n");
+					}
+				}
+			}
+		}
+	}
+
+
+		public static int neighbours (int row, int col) {
+		  int acc=0;
+		  for ( int i = row -1; i <= row + 1 ; i++)
+		    {
+		     for (int j = col -1 ; j <= col + 1 ; j++)
+		       {
+		       try {
+		         if (cgol.current[i][j].equals("*") && (i != row || j!=col))
+		         {
+		           acc++;
+		         }          
+		       } catch ( ArrayIndexOutOfBoundsException f)
+		       {continue;}
+		     }
+		  }
+		  return acc;
+		}
 }
