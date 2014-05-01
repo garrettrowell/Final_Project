@@ -126,29 +126,29 @@ public class conwayGOL {
 		for(cgol.getCurrentGen();cgol.getCurrentGen()<=cgol.getMaxGen();cgol.setCurrentGen(cgol.getCurrentGen()+1)){
 			
 		
-		String[][] tempCells = new String [cgol.getRows()][cgol.getCloumns()]; 
+		cgol.next = new String [cgol.getRows()][cgol.getCloumns()]; 
 		for( int i=0; i<cgol.getRows(); i++ ) {
 			for( int j=0; j<cgol.getCloumns(); j++ ) {
-				tempCells[i][j] = cgol.current[i][j];
+				cgol.next[i][j] = cgol.current[i][j];
 				}
 			} 
 		
-		for (int row = 0; row < cgol.getRows() ; row++){
-			for (int col = 0 ; col < cgol.getCloumns() ; col++) {
-				int n = neighbours(row,col);
+		for (int i = 0; i < cgol.getRows() ; i++){
+			for (int j = 0 ; j < cgol.getCloumns() ; j++) {
+				int n = neighbours(i,j);
 				if (n > 3  ||  n < 2)
-					tempCells[row][col]=(" ");
+					cgol.next[i][j]=(" ");
 				else if (n == 3)
-					tempCells[row][col]=("*");
+					cgol.next[i][j]=("*");
 				else
-					tempCells[row][col]=(cgol.current[row][col]);
+					cgol.next[i][j]=(cgol.current[i][j]);
 				}
 		}
 		System.out.println("Generation: "+cgol.getCurrentGen());
 		for(int i=0;i<=(cgol.getRows()-1);i++){
 			for(int j=0;j<=(cgol.getCloumns()-1);j++){
-				System.out.print(tempCells[i][j]);
-				cgol.current[i][j]=tempCells[i][j];
+				System.out.print(cgol.next[i][j]);
+				cgol.current[i][j]=cgol.next[i][j];
 				if (j==cgol.getCloumns()-1){
 					System.out.print("\n");
 					}
@@ -156,23 +156,21 @@ public class conwayGOL {
 			}
 		}
 	}
-
-
-		public static int neighbours (int row, int col) {
-		  int acc=0;
-		  for ( int i = row -1; i <= row + 1 ; i++)
-		    {
-		     for (int j = col -1 ; j <= col + 1 ; j++)
-		       {
-		       try {
-		         if (cgol.current[i][j].equals("*") && (i != row || j!=col))
-		         {
-		           acc++;
-		         }          
-		       } catch ( ArrayIndexOutOfBoundsException f)
-		       {continue;}
-		     }
-		  }
-		  return acc;
+	public static int neighbours (int row, int col) {
+		int acc=0;
+		for ( int i = row -1; i <= row + 1 ; i++){
+			for (int j = col -1 ; j <= col + 1 ; j++){
+				try {
+					if (cgol.current[i][j].equals("*") && (i != row || j!=col))
+					{
+						acc++;
+					}          
+				} 
+				catch ( ArrayIndexOutOfBoundsException f){
+					continue;
+					}	
+			}
 		}
+		  return acc;
+	}
 }
